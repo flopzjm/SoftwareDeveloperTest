@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SoftwarePresentation.DataAccess
+namespace SoftwareDeveloper.Business
 {
-    public class EmployeeDAO
+    public class EmployeeBO
     {
+
     }
 }
