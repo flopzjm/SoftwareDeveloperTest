@@ -1,0 +1,146 @@
+﻿@model IEnumerable<SoftwareDeveloper.Entities.Datum>
+
+@{
+    ViewBag.Title = "Employee";
+}
+
+
+<link href="~/Content/datatables.min.css" rel="stylesheet" />
+
+<div class="container-fluid">
+    <div class="col-md-6">
+        <label for="numberInput">Ingrese un número:</label>
+        <input type="text" id="numberInput" name="numberInput">
+        <button id="consultButton">Consultar</button>
+    </div>
+</div>
+<div class="tablecontainer">
+    <table id="Mydatatable" class="table table-responsive table-hover">
+        <thead>
+            <tr>
+                <th>Employee Id</th>
+                <th>Employee Name</th>
+                <th>Employee Age</th>
+                <th>Employee Salary</th>
+                <th>Employee Anual Salary</th>
+                <th>Employee Image</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+
+<script src="~/Scripts/jquery-3.1.1.min.js"></script>
+<script src="~/Scripts/datatables.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("#numberInput").keypress(function (event) {
+
+            var charCode = (event.which) ? event.which : event.keyCode;
+
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                event.preventDefault();
+            }
+        });
+
+        $("#consultButton").click(function () {
+            var numberValue = $("#numberInput").val();
+            CargarTabla();
+        });
+    });
+    function LoadTable() {
+        var numberValue = $("#numberInput").val();
+        let url = "@Url.Action("Consulta", "Employee")";
+            if (numberValue >0) {
+                url += `?id=${encodeURIComponent(numberValue)}`;
+            } else {
+                url += `?id=${encodeURIComponent(0)}`;
+            }
+        const tableBody = document.querySelector("#Mydatatable tbody");
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data); // Agrega esta línea para depurar
+                data.forEach(item => {
+                    const row = tableBody.insertRow();
+                    row.insertCell().textContent = item.id;
+                    row.insertCell().textContent = item.employee_name;
+                    row.insertCell().textContent = item.employee_salary;
+                    row.insertCell().textContent = item.employee_anual_salary;
+                    row.insertCell().textContent = item.employee_age;
+                    row.insertCell().textContent = item.profile_image;
+
+                });
+            })
+            .catch(error => console.error("Error fetching data:", error));
+
+
+
+    }
+
+    function CargarTabla() {
+        console.log("Cargando tabla ");
+
+        $('#Mydatatable').DataTable().clear();
+        $('#Mydatatable').DataTable().clear().draw();
+        $('#Mydatatable').DataTable().destroy();
+                let urlDestino = "@Url.Action("Consulta", "Employee")";
+            if (numberValue >0) {
+                urlDestino += `?id=${encodeURIComponent(numberValue)}`;
+            } else {
+                urlDestino += `?id=${encodeURIComponent(0)}`;
+            }
+        var ohTable;
+        ohTable = $('#Mydatatable').DataTable({
+            "ajax": {
+                "url": "urlDestino",
+                "type": "GET",
+                //"data": { txtcodi_ccostos: valor, nume_orden: "", fecha: fecha_con },
+                "datatype": "json",
+            },
+
+            "retrieve": true,
+            "responsive": true,
+            "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "Ningún dato disponible en esta tabla",
+                "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "Buscar:",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Último",
+                    "sNext": "Siguiente",
+                    "sPrevious": "Anterior"
+                },
+                "oAria": {
+                    "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            },
+            "columns": [
+                { "data": "id", "autoWidth": true },
+                { "data": "EmployeeName", "autoWidth": true },
+                { "data": "EmployeeSalary", "autoWidth": true },
+                { "data": "EmployeeAnualSalary", "autoWidth": true },
+                { "data": "EmployeeAge", "autoWidth": true },
+                { "data": "ProfileImage", "autoWidth": true }
+            ]
+        });
+
+
+
+    }
+
+
+</script>

@@ -10,13 +10,13 @@ namespace SoftwareDeveloper.Entities
 
     public class EmployeeDTO
     {
-        [JsonProperty("status")]
+        //[JsonProperty("status")]
         public string Status { get; set; }
 
-        [JsonProperty("data")]
+        //[JsonProperty("data")]
         public List<Datum> Data { get; set; }
 
-        [JsonProperty("message")]
+        //[JsonProperty("message")]
         public string Message { get; set; }
     }
 
@@ -36,6 +36,8 @@ namespace SoftwareDeveloper.Entities
 
         [JsonProperty("profile_image")]
         public string ProfileImage { get; set; }
+        [JsonProperty("employee_anual_salary")]
+        public long EmployeeAnualSalary { get; set; }
     }
 
 
